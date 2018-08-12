@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "chatterbox-7691a",
+    "cd functions; npm install; cd -": "chatterbox-7691a"
+  }
+}
