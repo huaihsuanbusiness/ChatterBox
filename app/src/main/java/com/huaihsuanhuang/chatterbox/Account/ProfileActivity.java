@@ -28,17 +28,16 @@ import com.huaihsuanhuang.chatterbox.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity {
     private String uid;
-    private TextView profile_name, profile_status,profile_count;
+    private TextView profile_name, profile_status, profile_count;
     private ImageView profile_image;
     private DatabaseReference mreference, mfirend_request, mfrienddatabase, mcloud_message;
     private FirebaseUser currentUser;
     private StorageReference mProfileImage;
     private ProgressBar mCAprogressbar;
-    private int current_state;
+    public static int current_state;
     private Button profile_btn_send, profile_btn_decline;
 
 
@@ -49,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         profile_name = findViewById(R.id.profile_name);
         profile_image = findViewById(R.id.profile_image);
         profile_status = findViewById(R.id.profile_status);
-        profile_count=findViewById(R.id.profile_count);
+        profile_count = findViewById(R.id.profile_count);
         mCAprogressbar = findViewById(R.id.progressbar_profile);
         profile_btn_decline = findViewById(R.id.profile_btn_decline);
         profile_btn_decline.setVisibility(View.GONE);
@@ -83,12 +82,13 @@ public class ProfileActivity extends AppCompatActivity {
         mfirend_request.keepSynced(true);
         mfrienddatabase = FirebaseDatabase.getInstance().getReference().child("Friends");
         mfrienddatabase.keepSynced(true);
-        mcloud_message=FirebaseDatabase.getInstance().getReference().child("CM");
-
-        if (uid.equals(currentUser.getUid())){
+        mcloud_message = FirebaseDatabase.getInstance().getReference().child("CM");
+        //note remove request 方法待合併
+        if (uid.equals(currentUser.getUid())) {
             profile_btn_send.setVisibility(View.GONE);
             profile_count.setVisibility(View.GONE);
-        }{
+        }
+        {
             profile_btn_send.setText("Send friend request");
         }
         mreference.addValueEventListener(new ValueEventListener() {
@@ -126,21 +126,20 @@ public class ProfileActivity extends AppCompatActivity {
                                 profile_btn_send.setText("Cancel request");
                                 current_state = 1;
                             }
-                        }else {
+                        } else {
                             //沒請求時判斷ok
                             //renew button or instant renew?
                             mfrienddatabase.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.hasChild(uid)){
-                                        current_state=3;
+                                    if (dataSnapshot.hasChild(uid)) {
+                                        current_state = 3;
                                         profile_btn_send.setText("UnFriend");
                                         profile_btn_decline.setVisibility(View.GONE);
                                         //remind 通知好友被接受 2223 node.js unable to connect with firebase
-                                       // https://github.com/firebase/functions-samples/blob/Node-8/fcm-notifications/functions/index.js
-                                    }
-                                    else {
-                                        current_state=0;
+                                        // https://github.com/firebase/functions-samples/blob/Node-8/fcm-notifications/functions/index.js
+                                    } else {
+                                        current_state = 0;
                                         profile_btn_send.setText("Send friend request");
                                         profile_btn_decline.setVisibility(View.GONE);
                                         //remind 通知好友被取消
@@ -180,21 +179,11 @@ public class ProfileActivity extends AppCompatActivity {
                                 mfirend_request.child(uid).child(currentUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        HashMap<String,String> cm_data = new HashMap<>();
-                                        cm_data.put("from",currentUser.getUid());
-                                        cm_data.put("type","request");
-
-
-                                        mcloud_message.child(uid).push().setValue(cm_data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                profile_btn_send.setEnabled(true);
-                                                current_state = 1;
-                                                profile_btn_send.setText("Cancel request");
-                                                Toast.makeText(ProfileActivity.this, "Request sent", Toast.LENGTH_SHORT).show();
-
-                                            }
-                                        });
+//
+                                        profile_btn_send.setEnabled(true);
+                                        current_state = 1;
+                                        profile_btn_send.setText("Cancel request");
+                                        Toast.makeText(ProfileActivity.this, "Request sent", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -226,10 +215,10 @@ public class ProfileActivity extends AppCompatActivity {
                     Date date = new Date(currentTime);
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     final String formatedtime = formatter.format(date);
-                    mfrienddatabase.child(currentUser.getUid()).child(uid).setValue(formatedtime).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mfrienddatabase.child(currentUser.getUid()).child(uid).child("date").setValue(formatedtime).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            mfrienddatabase.child(uid).child(currentUser.getUid()).setValue(formatedtime).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            mfrienddatabase.child(uid).child(currentUser.getUid()).child("date").setValue(formatedtime).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 //remind : 發送一條訊息給對方告知已完成邀請
                                 // remind：刪除好友 ok
                                 //remind ：拒絕邀請 ok
@@ -257,20 +246,20 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     });
                 }
-                if (current_state==3){ //取消好友ok
+                if (current_state == 3) { //取消好友ok
                     mfrienddatabase.child(currentUser.getUid()).child(uid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                       mfrienddatabase.child(uid).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                           @Override
-                           public void onSuccess(Void aVoid) {
-                               profile_btn_send.setEnabled(true);
-                               current_state = 0;
-                               profile_btn_send.setText("Send friend request");
-                               Toast.makeText(ProfileActivity.this, "Unfriended ", Toast.LENGTH_SHORT).show();
+                            mfrienddatabase.child(uid).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    profile_btn_send.setEnabled(true);
+                                    current_state = 0;
+                                    profile_btn_send.setText("Send friend request");
+                                    Toast.makeText(ProfileActivity.this, "Unfriended ", Toast.LENGTH_SHORT).show();
 
-                           }
-                       });
+                                }
+                            });
                         }
                     });
 

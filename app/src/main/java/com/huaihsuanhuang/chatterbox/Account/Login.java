@@ -239,7 +239,7 @@ public class Login extends AppCompatActivity {
                             updateuserstatus(user);
                             finish();
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If sign in fails, display a Messagemodel to the user.
                             Log.w("signinfailure", "signInWithCredential:failure", task.getException());
                             Snackbar.make(getCurrentFocus(), "Google Login Failed", Snackbar.LENGTH_LONG).show();
                             mCAprogressbar.setVisibility(View.GONE);

@@ -3,12 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Mainpage.ChatFragment">
+    tools:context=".Mainpage.MessagelistFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="chat" />
+
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/msglistfm_recyclerview"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+   </android.support.v7.widget.RecyclerView>
+
+
 
 </FrameLayout>

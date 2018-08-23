@@ -11,13 +11,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".Widget.Persistence"
         android:allowBackup="true"
         android:icon="@mipmap/logo_crop"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo_crop"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".Weight.Persistence">
+        android:theme="@style/AppTheme">
         <activity android:name=".Mainpage.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,29 +37,32 @@
             android:parentActivityName=".Mainpage.MainActivity" />
         <activity
             android:name=".Account.StatusActivity"
-            android:parentActivityName=".Account.SettingActivity"></activity>
+            android:parentActivityName=".Account.SettingActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".Account.UsersActivity"
-            android:parentActivityName=".Mainpage.MainActivity"></activity>
-        <activity android:name=".Account.ProfileActivity"></activity>
+            android:parentActivityName=".Mainpage.MainActivity" />
+        <activity android:name=".Account.ProfileActivity" />
+
         <service
             android:name="com.google.firebase.iid.FirebaseInstanceIdService"
-            android:exported="true" >
-            <intent-filter android:priority="-500" >
+            android:exported="true">
+            <intent-filter android:priority="-500">
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".Weight.MyFirebaseMessagingService"
+            android:name=".Widget.MyFirebaseMessagingService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".Messages.ChatActivity" android:parentActivityName=".Mainpage.MainActivity"> </activity>
     </application>
 
 </manifest>

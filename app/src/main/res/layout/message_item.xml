@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chatitem_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/chatitem_image"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@mipmap/empty_profile" />
+    <TextView
+        android:id="@+id/chatitem_dispalyname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display Name"
+        android:textSize="16sp"
+        android:layout_marginStart="75dp"/>
+    <TextView
+        android:id="@+id/chatitem_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="16sp"
+        android:layout_marginStart="10dp"
+        android:layout_toRightOf="@id/chatitem_dispalyname"
+        />
+
+    <TextView
+        android:id="@+id/chatitem_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="74dp"
+        android:background="@drawable/message_text_background"
+        android:padding="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/chatitem_dispalyname"
+        android:text="text text"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/chatitem_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/chatitem_text"
+        android:layout_below="@id/chatitem_text"
+        android:padding="5dp"
+        android:src="@mipmap/logo_crop"
+        android:layout_marginStart="78dp"
+        android:layout_alignParentStart="true"
+        android:scaleType="centerCrop" />
+
+</RelativeLayout>

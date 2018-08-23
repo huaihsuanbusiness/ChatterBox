@@ -1,17 +1,20 @@
 package com.huaihsuanhuang.chatterbox.Mainpage;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.huaihsuanhuang.chatterbox.Account.SettingActivity;
 import com.huaihsuanhuang.chatterbox.Account.StartActivity;
 import com.huaihsuanhuang.chatterbox.Account.UsersActivity;
@@ -25,20 +28,29 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mviewPager;
     private SectionPagerAdapter msectionPagerAdapter;
     private TabLayout mtabLayout;
+    private DatabaseReference userref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
-        mToolbar=findViewById(R.id.toolbar_mainactivity);
-        mainactivity_layout=findViewById(R.id.mainactivity_layout);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("ChatterBox");
-        mviewPager =findViewById(R.id.viewpager_main);
-        msectionPagerAdapter =new SectionPagerAdapter(getSupportFragmentManager());
-        mviewPager.setAdapter(msectionPagerAdapter);
-        mtabLayout =findViewById(R.id.tablayout_mainactivity);
-        mtabLayout.setupWithViewPager(mviewPager);
+        if(mAuth.getCurrentUser()!=null) {
+            mToolbar = findViewById(R.id.toolbar_mainactivity);
+            mainactivity_layout = findViewById(R.id.mainactivity_layout);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setTitle("ChatterBox");
+            mviewPager = findViewById(R.id.viewpager_main);
+            msectionPagerAdapter = new SectionPagerAdapter(getSupportFragmentManager());
+            mviewPager.setAdapter(msectionPagerAdapter);
+            mtabLayout = findViewById(R.id.tablayout_mainactivity);
+            mtabLayout.setupWithViewPager(mviewPager);
+
+            userref = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        }
+        else {
+            sendtostartpage();
+        }
     }
     @Override
     public void onStart() {
@@ -47,7 +59,20 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser == null){
             sendtostartpage();
         }
+        else {
+            userref.child("online").setValue("true");
+        }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FirebaseUser currentuser= FirebaseAuth.getInstance().getCurrentUser();
+        if (currentuser!=null) {
+
+            userref.child("online").setValue(System.currentTimeMillis());
+
+        }}
 
     private void sendtostartpage() {
         Intent intent = new Intent(MainActivity.this, StartActivity.class);
@@ -57,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_main_side,menu);
 
 

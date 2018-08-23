@@ -1,4 +1,4 @@
-package com.huaihsuanhuang.chatterbox.Weight;
+package com.huaihsuanhuang.chatterbox.Widget;
 
 import android.app.NotificationManager;
 import android.util.Log;

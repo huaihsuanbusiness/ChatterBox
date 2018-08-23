@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.huaihsuanhuang.chatterbox.Mainpage.ChatFragment;
+import com.huaihsuanhuang.chatterbox.Mainpage.MessagelistFragment;
 import com.huaihsuanhuang.chatterbox.Mainpage.FriendFragment;
 import com.huaihsuanhuang.chatterbox.Mainpage.RequestFragment;
 
@@ -22,7 +22,7 @@ public class SectionPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new FriendFragment();
             case 1:
-                return new ChatFragment();
+                return new MessagelistFragment();
             case 2:
                 return new RequestFragment();
             default:
@@ -42,7 +42,7 @@ public class SectionPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Friends";
             case 1:
-                return "Chats";
+                return "Messages";
             case 2:
                 return "Requests";
             default:
