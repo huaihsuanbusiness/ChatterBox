@@ -67,7 +67,7 @@ public class RequestViewHolder extends RecyclerView.ViewHolder implements View.O
         users_decline.setVisibility(View.VISIBLE);
 
     }
-//TODO 有辦法合併？
+
     public void setacceptButton() {
         users_accept=itemView.findViewById(R.id.users_accept);
         users_accept.setVisibility(View.VISIBLE);

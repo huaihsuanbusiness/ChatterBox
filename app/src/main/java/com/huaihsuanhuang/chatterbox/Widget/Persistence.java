@@ -32,7 +32,7 @@ public class Persistence extends Application {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot!=null){
-                    reference.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+                    reference.child("online").onDisconnect().setValue(String.valueOf(System.currentTimeMillis()));
 
                 }
 

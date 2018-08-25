@@ -1,6 +1,5 @@
 package com.huaihsuanhuang.chatterbox.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -16,8 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.huaihsuanhuang.chatterbox.Messages.ChatActivity;
 import com.huaihsuanhuang.chatterbox.Model.Messagemodel;
 import com.huaihsuanhuang.chatterbox.R;
 
@@ -25,21 +24,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
-
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     private List<Messagemodel> mMessagelist;
     private String mchatuid;
     private FirebaseAuth mAuth;
-    private DatabaseReference reference;
-    String image_currentuser,displayname_currentuser;
-    String image_chatuser,displayname_chatuser;
+
+    String image_currentuser, displayname_currentuser;
+    String image_chatuser, displayname_chatuser;
     Context context;
 
-    public MessageAdapter(List<Messagemodel> mMessagelist, String mchatuid, Context context) {
+    public MessageAdapter(List<Messagemodel> mMessagelist, String mchatuid,
+                          String image_currentuser, String displayname_currentuser,
+                          String image_chatuser, String displayname_chatuser, Context context) {
         this.mMessagelist = mMessagelist;
         this.mchatuid = mchatuid;
+        this.image_currentuser = image_currentuser;
+        this.displayname_currentuser = displayname_currentuser;
+        this.image_chatuser = image_chatuser;
+        this.displayname_chatuser = displayname_chatuser;
         this.context = context;
     }
 
@@ -54,41 +57,22 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         return new MessageViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         String currentuid = mAuth.getCurrentUser().getUid();
 
-        Messagemodel c = mMessagelist.get(position);
+        String from_user = "";
+        String messgae_type = "";
+        Messagemodel c = new Messagemodel();
+        if (!mMessagelist.isEmpty()) {
+            c = mMessagelist.get(position);
 
-        String from_user = c.getFrom();
-        String messgae_type= c.getType();
-        reference.child("Users").child(currentuid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                image_currentuser =dataSnapshot.child("thumb_image").getValue().toString();
-                displayname_currentuser  =dataSnapshot.child("name").getValue().toString();
-            }
+            from_user = c.getFrom();
+            messgae_type = c.getType();
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-        reference.child("Users").child(mchatuid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                image_chatuser =dataSnapshot.child("thumb_image").getValue().toString();
-                displayname_chatuser  =dataSnapshot.child("name").getValue().toString();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        if(from_user.equals(currentuid)){
+        if (from_user.equals(currentuid)) {
 
             holder.chatitem_text.setBackgroundColor(Color.WHITE);
             holder.chatitem_text.setTextColor(Color.BLACK);
@@ -106,8 +90,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
 // remind bind 時間
 
-        }
-        else{
+        } else {
             holder.chatitem_text.setBackgroundResource(R.drawable.message_text_background);
             holder.chatitem_text.setTextColor(Color.WHITE);
             holder.chatitem_imageview.setBackgroundResource(R.drawable.message_text_background);
@@ -134,7 +117,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             holder.chatitem_text.setVisibility(View.VISIBLE);
             holder.chatitem_imageview.setVisibility(View.GONE);
 
-        }else{
+        } else {
             holder.chatitem_text.setVisibility(View.GONE);
             holder.chatitem_imageview.setVisibility(View.VISIBLE);
             Glide.with(context)

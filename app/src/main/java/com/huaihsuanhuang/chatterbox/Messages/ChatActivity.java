@@ -46,8 +46,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class ChatActivity extends AppCompatActivity {
 
     private String mchatuserid, mchatusername, mcurrentuserid;
@@ -56,8 +54,8 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private TextView chatbar_display;
     private TextView chatbar_lastseen;
-    private CircleImageView chatbar_image;
     private String chat_name, chat_image;
+    private String currentuser_name, currentuser_image;
     private ImageButton chat_ib_plus, chat_ib_send;
     private EditText chat_messageview;
     private RecyclerView chat_meassagelist;
@@ -72,11 +70,13 @@ public class ChatActivity extends AppCompatActivity {
     private String mlastkey = "";
     private String mprevkey = "";
     private StorageReference mProfileImage;
+    private Map<String, Object> mMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
         mchatuserid = getIntent().getStringExtra("uid");
         mchatusername = getIntent().getStringExtra("name");
         mAuth = FirebaseAuth.getInstance();
@@ -90,19 +90,17 @@ public class ChatActivity extends AppCompatActivity {
                 plusbtnintent.setType("image/*");
                 plusbtnintent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(plusbtnintent, "SELECT IMAGE"), GALLERY_PICK);
-
             }
         });
         chat_ib_send = findViewById(R.id.chat_ib_send);
         chat_messageview = findViewById(R.id.chat_text);
-        mMessageAdapter = new MessageAdapter(messagemodelList, mchatusername, getBaseContext());
         chat_meassagelist = findViewById(R.id.chat_messagelist);
         refreshLayout = findViewById(R.id.chat_swipe);
         linearLayoutManager = new LinearLayoutManager(this);
         chat_meassagelist.setLayoutManager(linearLayoutManager);
         chat_meassagelist.setAdapter(mMessageAdapter);
-        loadmessage();
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowCustomEnabled(true);
@@ -115,7 +113,6 @@ public class ChatActivity extends AppCompatActivity {
         actionBar.setCustomView(action_bar_view);
         chatbar_display = findViewById(R.id.chatbar_display);
         chatbar_lastseen = findViewById(R.id.chat_lastseen);
-        chatbar_image = findViewById(R.id.chatbar_image);
         chatbar_display.setText(mchatusername);
         mProfileImage = FirebaseStorage.getInstance().getReference();
         friend_selected_ref.child(mchatuserid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -124,17 +121,28 @@ public class ChatActivity extends AppCompatActivity {
                 chat_name = dataSnapshot.child("name").getValue().toString();
                 chat_image = dataSnapshot.child("thumb_image").getValue().toString();
                 String chat_onlinestatus = dataSnapshot.child("online").getValue().toString();
-                long date_longtype = Long.parseLong(chat_onlinestatus);
-                Date date = new Date(date_longtype);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                final String formatedtime = formatter.format(date);
-                if (chat_onlinestatus.equals("true")) {
-                    chatbar_lastseen.setText("Online");
-                } else {
+                if (!chat_onlinestatus.equals("true")) {
+                    long date_longtype = Long.parseLong(chat_onlinestatus);
+                    Date date = new Date(date_longtype);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    final String formatedtime = formatter.format(date);
                     chatbar_lastseen.setText(formatedtime);
+                } else {
+                    chatbar_lastseen.setText("Online");
                     //remind: create a class for 多久前上線 28
                 }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        friend_selected_ref.child(mcurrentuserid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currentuser_name = dataSnapshot.child("name").getValue().toString();
+                currentuser_image = dataSnapshot.child("thumb_image").getValue().toString();
 
             }
 
@@ -143,6 +151,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+        mMessageAdapter = new MessageAdapter(messagemodelList, mchatuserid, currentuser_image,
+                currentuser_name, chat_image, chat_name, getBaseContext());
 
         rooffef.child("Chat").child(mcurrentuserid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -150,7 +160,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 if (!dataSnapshot.hasChild(mchatuserid)) {
                     Map chataddmap = new HashMap();
-                    chataddmap.put("seen", false);
+                    chataddmap.put("seen", "false");
                     chataddmap.put("timestamp", System.currentTimeMillis());
 
                     Map chatusermap = new HashMap();
@@ -193,35 +203,38 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-
+        loadmessage();
     }
 
     private void loadmoremessage() {
+
         DatabaseReference loadmsgref = rooffef.child("Messages").child(mcurrentuserid).child(mchatuserid);
         Query messageQuery = loadmsgref.orderByKey().endAt(mlastkey).limitToLast(10);
         messageQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Messagemodel messagemodel = dataSnapshot.getValue(Messagemodel.class);
+                if (dataSnapshot.exists()) {
+                    Messagemodel messagemodel = dataSnapshot.getValue(Messagemodel.class);
 
-                String messagekey = dataSnapshot.getKey();
+                    String messagekey = dataSnapshot.getKey();
 
-                if (!mlastkey.equals(messagekey)) {
-                    messagemodelList.add(itemposition++, messagemodel);
+                    if (!mlastkey.equals(messagekey)) {
+                        messagemodelList.add(itemposition++, messagemodel);
 
-                } else {
+                    } else {
 
-                    mprevkey = messagekey;
+                        mprevkey = messagekey;
+                    }
+                    if (itemposition == 1) {
+
+                        mlastkey = messagekey;
+                    }
+
+
+                    mMessageAdapter.notifyDataSetChanged();
+                    refreshLayout.setRefreshing(false);
+                    linearLayoutManager.scrollToPositionWithOffset(10, 0);
                 }
-                if (itemposition == 1) {
-
-                    mlastkey = messagekey;
-                }
-
-
-                mMessageAdapter.notifyDataSetChanged();
-                refreshLayout.setRefreshing(false);
-                linearLayoutManager.scrollToPositionWithOffset(10, 0);
             }
 
             @Override
@@ -249,41 +262,31 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void loadmessage() {
+
         DatabaseReference loadmsgref = rooffef.child("Messages").child(mcurrentuserid).child(mchatuserid);
+
         Query messageQuery = loadmsgref.limitToLast(mcurrentpage * TOTAL_ITEMS_TO_LOAD);
-
-
-        messageQuery.addChildEventListener(new ChildEventListener() {
+        messageQuery.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Messagemodel messagemodel = dataSnapshot.getValue(Messagemodel.class);
-                itemposition++;
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    //    Log.d("snapmmmMap",snapshot.getKey()+" : "+snapshot.getValue());
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                        Log.d("snapmmmMap1", snapshot.getKey() + " : " + snapshot.getValue());
+                        mMap.put(snapshot1.getKey(), snapshot1.getValue());
+                        }
+                    Log.d("snapmMap1", mMap.toString());
+                    String message = mMap.get("message").toString();
+                    String seen = mMap.get("seen").toString();
+                    String time = mMap.get("time").toString();
+                    String type = mMap.get("type").toString();
+                    String from = mMap.get("from").toString();
+                    messagemodelList.add(new Messagemodel(message, seen, time, type, from));
+                    mMessageAdapter.notifyDataSetChanged();
 
-                if (itemposition == 1) {
-                    String messagekey = dataSnapshot.getKey();
-                    mlastkey = messagekey;
-                    mprevkey = messagekey;
+                    //TODO E/RecyclerView: No adapter attached; skipping layout
+                    mMap.clear();
                 }
-
-                messagemodelList.add(messagemodel);
-                mMessageAdapter.notifyDataSetChanged();
-                chat_meassagelist.scrollToPosition(messagemodelList.size() - 1);
-                refreshLayout.setRefreshing(false);
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
 
@@ -308,7 +311,7 @@ public class ChatActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(message)) {
             Map messagemap = new HashMap();
             messagemap.put("message", message);
-            messagemap.put("seen", false);
+            messagemap.put("seen", "false");
             messagemap.put("type", "text");
             messagemap.put("time", System.currentTimeMillis());
             messagemap.put("from", mcurrentuserid);
@@ -374,7 +377,7 @@ public class ChatActivity extends AppCompatActivity {
                                 rooffef.updateChildren(messageusermap, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                                        if (databaseError!=null){
+                                        if (databaseError != null) {
                                             Log.d("Chaterror", databaseError.getMessage().toString());
                                         }
 

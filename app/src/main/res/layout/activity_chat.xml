@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Messages.ChatActivity"
-
+    android:windowSoftInputMode="adjustResize"
 
     >
 
@@ -16,18 +16,21 @@
         >
 
     </include>
+
+
 <android.support.v4.widget.SwipeRefreshLayout
     android:id="@+id/chat_swipe"
     android:layout_width="match_parent"
-    android:layout_height="464dp"
-    android:layout_below="@id/toolbar_chat">
+    android:layout_height="match_parent"
+    android:layout_below="@id/toolbar_chat"
+    >
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chat_messagelist"
         android:layout_width="match_parent"
-        android:layout_height="464dp"
-        android:background="@color/colorAqua"
+        android:layout_height="match_parent"
+        android:background="@color/fui_linkColor"
         android:alpha="50">
 
     </android.support.v7.widget.RecyclerView>
@@ -41,29 +44,29 @@
     android:layout_alignParentBottom="true"
     android:weightSum="10"
     android:orientation="horizontal"
-    android:layout_below="@id/chat_swipe"
 
     >
+
     <ImageButton
         android:id="@+id/chat_ib_plus"
-        android:layout_width="0dp"
-        android:layout_weight="1.3"
+        android:layout_width="1dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:elevation="5dp"
-        android:padding="10dp"
+        android:layout_weight="1.3"
         android:alpha="0.5"
-        android:src="@drawable/ic_add_black_24dp"/>
+        android:background="@color/colorWhite"
+        android:elevation="7dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_add_black_24dp" />
     <EditText
         android:id="@+id/chat_text"
         android:layout_width="0dp"
-        android:layout_weight="7.4"
+        android:layout_weight="7.6"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:padding="10dp"
         android:layout_gravity="bottom"
         android:background="@color/colorWhite"
         android:hint="Text here"
-        android:elevation="20dp"/>
+        android:elevation="7dp"/>
     <ImageButton
         android:id="@+id/chat_ib_send"
         android:layout_width="0dp"

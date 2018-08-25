@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentuser= FirebaseAuth.getInstance().getCurrentUser();
         if (currentuser!=null) {
 
-            userref.child("online").setValue(System.currentTimeMillis());
+            userref.child("online").setValue(String.valueOf(System.currentTimeMillis()));
 
         }}
 

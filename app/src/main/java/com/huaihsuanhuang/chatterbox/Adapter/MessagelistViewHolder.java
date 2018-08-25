@@ -26,12 +26,12 @@ public class MessagelistViewHolder extends RecyclerView.ViewHolder implements Vi
 
     }
 
-    public static void setMessage(String message, boolean isSeen){
+    public static void setMessage(String message, String isSeen){
 
         TextView userStatusView =  mView.findViewById(R.id.users_status);
         userStatusView.setText(message);
 
-        if(!isSeen){
+        if(!isSeen.equals("seen")){
             userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.BOLD);
         } else {
             userStatusView.setTypeface(userStatusView.getTypeface(), Typeface.NORMAL);

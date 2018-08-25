@@ -1,23 +1,25 @@
 package com.huaihsuanhuang.chatterbox.Model;
 
-public class Users {
+public class FriendUsers {
+
+
     private String name;
     private String status;
     private String image;
     private String online;
     private String thumb_image;
+    private String key;
 
 
-    public Users(String name, String status, String image, String online, String thumb_image) {
+    public FriendUsers(){}
+
+    public FriendUsers(String name, String status, String image, String online, String thumb_image, String key) {
         this.name = name;
         this.status = status;
         this.image = image;
         this.online = online;
         this.thumb_image = thumb_image;
-    }
-
-    public Users() {
-
+        this.key = key;
     }
 
     public String getName() {
@@ -58,5 +60,13 @@ public class Users {
 
     public void setThumb_image(String thumb_image) {
         this.thumb_image = thumb_image;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

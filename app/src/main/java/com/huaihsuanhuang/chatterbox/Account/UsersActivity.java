@@ -49,9 +49,11 @@ public class UsersActivity extends AppCompatActivity {
         users_list.setDrawingCacheEnabled(true);
         users_list.setItemViewCacheSize(20);
         users_list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+
         reference_users = FirebaseDatabase.getInstance().getReference().child("Users");
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         loadinusers();
+        users_list.setAdapter(adapter_users);
     }
 
     @Override
@@ -113,8 +115,8 @@ public class UsersActivity extends AppCompatActivity {
         };
 
         adapter_users.notifyDataSetChanged();
-        users_list.setAdapter(adapter_users);
-        users_list.setNestedScrollingEnabled(false);
+
+     //   users_list.setNestedScrollingEnabled(false);
 
 
     }

@@ -3,18 +3,18 @@ package com.huaihsuanhuang.chatterbox.Model;
 public class Seen {
 
 
-    public boolean seen;
+    public String seen;
     public long timestamp;
 
     public Seen() {
 
     }
 
-    public boolean isSeen() {
+    public String getSeen() {
         return seen;
     }
 
-    public void setSeen(boolean seen) {
+    public void setSeen(String seen) {
         this.seen = seen;
     }
 
@@ -26,7 +26,7 @@ public class Seen {
         this.timestamp = timestamp;
     }
 
-    public Seen(boolean seen, long timestamp) {
+    public Seen(String seen, long timestamp) {
         this.seen = seen;
         this.timestamp = timestamp;
     }
