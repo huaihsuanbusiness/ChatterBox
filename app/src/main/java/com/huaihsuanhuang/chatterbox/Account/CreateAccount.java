@@ -124,7 +124,7 @@ public class CreateAccount extends AppCompatActivity {
                                 startActivity(intent);
 
                               //  finish();
-
+        // TODO 有人輸入錯仍會上傳 導致資料會抓錯crash 待修
                             }
                         }
                     });

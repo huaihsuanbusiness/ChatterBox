@@ -309,6 +309,7 @@ public class ChatActivity extends AppCompatActivity {
         String push_id = user_message_push.getKey();
 
         if (!TextUtils.isEmpty(message)) {
+
             Map messagemap = new HashMap();
             messagemap.put("message", message);
             messagemap.put("seen", "false");
@@ -333,6 +334,8 @@ public class ChatActivity extends AppCompatActivity {
 
         }
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

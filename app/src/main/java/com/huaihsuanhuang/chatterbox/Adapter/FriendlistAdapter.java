@@ -31,13 +31,7 @@ public class FriendlistAdapter extends RecyclerView.Adapter<FriendlistAdapter.Fr
    // private List<Users> usersList;
     private List<FriendUsers> friendUsersList;
     private View mView;
-  //  private String user_id;
 
-//    public FriendlistAdapter(Context context, List<Users> usersList, String user_id) {
-//        this.context = context;
-//        this.usersList = usersList;
-//        this.user_id = user_id;
-//    }
 
     public FriendlistAdapter(Context context, List<FriendUsers> friendUsersList) {
         this.context = context;
