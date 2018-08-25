@@ -86,7 +86,7 @@ public class FriendFragment extends Fragment {
     }
 
     private void loadinfriendlist() {
-        mfrienddatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mfrienddatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
