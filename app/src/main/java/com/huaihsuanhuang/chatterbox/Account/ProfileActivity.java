@@ -171,100 +171,119 @@ public class ProfileActivity extends AppCompatActivity {
                 profile_btn_send.setEnabled(false);
                 if (current_state == 0) { //不是朋友 發送邀請ok
 
-                    mfirend_request.child(currentUser.getUid()).child(uid).child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-
-                                mfirend_request.child(uid).child(currentUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-//
-                                        profile_btn_send.setEnabled(true);
-                                        current_state = 1;
-                                        profile_btn_send.setText("Cancel request");
-                                        Toast.makeText(ProfileActivity.this, "Request sent", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
-                            } else {
-                                Toast.makeText(ProfileActivity.this, "Failed sending request", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                    sendrequest();
                 }
                 if (current_state == 1) { //取消好友邀請ok
-                    mfirend_request.child(currentUser.getUid()).child(uid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                            mfirend_request.child(uid).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    profile_btn_send.setEnabled(true);
-                                    current_state = 0;
-                                    profile_btn_send.setText("Send friend request");
-                                    Toast.makeText(ProfileActivity.this, "Request canceled", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
+              cancelrequest();
                 }
                 if (current_state == 2) { //接受好友ok
-                    long currentTime = System.currentTimeMillis();
-                    Date date = new Date(currentTime);
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    final String formatedtime = formatter.format(date);
-                    mfrienddatabase.child(currentUser.getUid()).child(uid).child("date").setValue(formatedtime).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            mfrienddatabase.child(uid).child(currentUser.getUid()).child("date").setValue(formatedtime).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                //remind : 發送一條訊息給對方告知已完成邀請
-                                // remind：刪除好友 ok
-                                //remind ：拒絕邀請 ok
-                                //remeind :發送方狀態更新 ok
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    mfirend_request.child(currentUser.getUid()).child(uid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-
-                                            mfirend_request.child(uid).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    profile_btn_send.setEnabled(true);
-                                                    current_state = 3;
-                                                    profile_btn_send.setText("UnFriend");
-                                                    profile_btn_decline.setVisibility(View.GONE);
-                                                    Toast.makeText(ProfileActivity.this, "Friend accepted", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
+                    acceptfirend();
                 }
                 if (current_state == 3) { //取消好友ok
-                    mfrienddatabase.child(currentUser.getUid()).child(uid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            mfrienddatabase.child(uid).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    profile_btn_send.setEnabled(true);
-                                    current_state = 0;
-                                    profile_btn_send.setText("Send friend request");
-                                    Toast.makeText(ProfileActivity.this, "Unfriended ", Toast.LENGTH_SHORT).show();
-
-                                }
-                            });
-                        }
-                    });
+    deletefriend();
 
                 }
             }
         });
+
+
     }
+
+    private void deletefriend() {
+        mfrienddatabase.child(currentUser.getUid()).child(uid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfrienddatabase.child(uid).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        profile_btn_send.setEnabled(true);
+                        current_state = 0;
+                        profile_btn_send.setText("Send friend request");
+                        Toast.makeText(ProfileActivity.this, "Unfriended ", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+            }
+        });
+    }
+
+    private void cancelrequest() {
+        mfirend_request.child(currentUser.getUid()).child(uid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                mfirend_request.child(uid).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        profile_btn_send.setEnabled(true);
+                        current_state = 0;
+                        profile_btn_send.setText("Send friend request");
+                        Toast.makeText(ProfileActivity.this, "Request canceled", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void sendrequest() {
+        mfirend_request.child(currentUser.getUid()).child(uid).child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                    mfirend_request.child(uid).child(currentUser.getUid()).child("request_type").setValue("received").addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            profile_btn_send.setEnabled(true);
+                            current_state = 1;
+                            profile_btn_send.setText("Cancel request");
+                            Toast.makeText(ProfileActivity.this, "Request sent", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(ProfileActivity.this, "Failed sending request", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void acceptfirend() {
+        long currentTime = System.currentTimeMillis();
+        Date date = new Date(currentTime);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        final String formatedtime = formatter.format(date);
+        mfrienddatabase.child(currentUser.getUid()).child(uid).child("date").setValue(formatedtime).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mfrienddatabase.child(uid).child(currentUser.getUid()).child("date").setValue(formatedtime).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    //remind : 發送一條訊息給對方告知已完成邀請
+                    // remind：刪除好友 ok
+                    //remind ：拒絕邀請 ok
+                    //remeind :發送方狀態更新 ok
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mfirend_request.child(currentUser.getUid()).child(uid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                                mfirend_request.child(uid).child(currentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        profile_btn_send.setEnabled(true);
+                                        current_state = 3;
+                                        profile_btn_send.setText("UnFriend");
+                                        profile_btn_decline.setVisibility(View.GONE);
+                                        Toast.makeText(ProfileActivity.this, "Friend accepted", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+
 }

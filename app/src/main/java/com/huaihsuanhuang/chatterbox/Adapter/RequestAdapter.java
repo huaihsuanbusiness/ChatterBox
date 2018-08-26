@@ -52,12 +52,14 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
         } else {
             holder.users_image.setImageResource(R.mipmap.empty_profile);
         }
+
 holder.users_carditem.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.putExtra("uid", requestlistmodelList.get(position).getUserid());
         context.startActivity(intent);
+
     }
 });
     }
@@ -79,6 +81,7 @@ holder.users_carditem.setOnClickListener(new View.OnClickListener() {
             users_image = itemView.findViewById(R.id.users_image);
             users_status =itemView.findViewById(R.id.users_status);
             users_carditem =itemView.findViewById(R.id.users_carditem);
+
 
         }
     }
