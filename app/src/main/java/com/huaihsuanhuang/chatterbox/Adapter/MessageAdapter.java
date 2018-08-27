@@ -12,11 +12,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.huaihsuanhuang.chatterbox.Model.Messagemodel;
 import com.huaihsuanhuang.chatterbox.R;
 
@@ -78,7 +73,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             holder.chatitem_text.setTextColor(Color.BLACK);
             holder.chatitem_imageview.setBackgroundColor(Color.WHITE);
             holder.chatitem_dispalyname.setText(displayname_currentuser);
-            if (!image_currentuser.equals("null")) {
+            if (image_currentuser != null) {
                 Glide.with(context)
                         .load(image_currentuser)
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))

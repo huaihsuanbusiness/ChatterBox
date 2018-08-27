@@ -98,7 +98,6 @@ public class ChatActivity extends AppCompatActivity {
         refreshLayout = findViewById(R.id.chat_swipe);
         linearLayoutManager = new LinearLayoutManager(this);
         chat_meassagelist.setLayoutManager(linearLayoutManager);
-        chat_meassagelist.setAdapter(mMessageAdapter);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
         ActionBar actionBar = getSupportActionBar();
@@ -153,7 +152,7 @@ public class ChatActivity extends AppCompatActivity {
         });
         mMessageAdapter = new MessageAdapter(messagemodelList, mchatuserid, currentuser_image,
                 currentuser_name, chat_image, chat_name, getBaseContext());
-
+        chat_meassagelist.setAdapter(mMessageAdapter);
         rooffef.child("Chat").child(mcurrentuserid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
