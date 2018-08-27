@@ -150,9 +150,10 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-        mMessageAdapter = new MessageAdapter(messagemodelList, mchatuserid, currentuser_image,
+        mMessageAdapter = new MessageAdapter(messagemodelList, currentuser_image,
                 currentuser_name, chat_image, chat_name, getBaseContext());
         chat_meassagelist.setAdapter(mMessageAdapter);
+
         rooffef.child("Chat").child(mcurrentuserid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -228,8 +229,6 @@ public class ChatActivity extends AppCompatActivity {
 
                         mlastkey = messagekey;
                     }
-
-
                     mMessageAdapter.notifyDataSetChanged();
                     refreshLayout.setRefreshing(false);
                     linearLayoutManager.scrollToPositionWithOffset(10, 0);
@@ -281,6 +280,7 @@ public class ChatActivity extends AppCompatActivity {
                     String type = mMap.get("type").toString();
                     String from = mMap.get("from").toString();
                     messagemodelList.add(new Messagemodel(message, seen, time, type, from));
+         Log.d("adapter", chat_image+"  "+currentuser_image+"  "+chat_name+"  "+currentuser_name);
                     mMessageAdapter.notifyDataSetChanged();
 
                     //TODO E/RecyclerView: No adapter attached; skipping layout
@@ -296,7 +296,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
-
+//upload text
     private void sendMessage() {
 
         String message = chat_messageview.getText().toString();
@@ -335,7 +335,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-
+//upload image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -22,22 +22,19 @@ import java.util.List;
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     private List<Messagemodel> mMessagelist;
-    private String mchatuid;
+
     private FirebaseAuth mAuth;
 
-    String image_currentuser, displayname_currentuser;
-    String image_chatuser, displayname_chatuser;
-    Context context;
+    private String currentuser_image, currentuser_name;
+    private String chat_image, chat_name;
+    private Context context;
 
-    public MessageAdapter(List<Messagemodel> mMessagelist, String mchatuid,
-                          String image_currentuser, String displayname_currentuser,
-                          String image_chatuser, String displayname_chatuser, Context context) {
+    public MessageAdapter(List<Messagemodel> mMessagelist, String currentuser_image, String currentuser_name, String chat_image, String chat_name, Context context) {
         this.mMessagelist = mMessagelist;
-        this.mchatuid = mchatuid;
-        this.image_currentuser = image_currentuser;
-        this.displayname_currentuser = displayname_currentuser;
-        this.image_chatuser = image_chatuser;
-        this.displayname_chatuser = displayname_chatuser;
+        this.currentuser_image = currentuser_image;
+        this.currentuser_name = currentuser_name;
+        this.chat_image = chat_image;
+        this.chat_name = chat_name;
         this.context = context;
     }
 
@@ -72,10 +69,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             holder.chatitem_text.setBackgroundColor(Color.WHITE);
             holder.chatitem_text.setTextColor(Color.BLACK);
             holder.chatitem_imageview.setBackgroundColor(Color.WHITE);
-            holder.chatitem_dispalyname.setText(displayname_currentuser);
-            if (image_currentuser != null) {
+            holder.chatitem_dispalyname.setText(currentuser_name);
+            if (!currentuser_image.equals("null")) {
                 Glide.with(context)
-                        .load(image_currentuser)
+                        .load(currentuser_image)
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
                         .into(holder.chatitem_image);
             } else {
@@ -89,10 +86,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
             holder.chatitem_text.setBackgroundResource(R.drawable.message_text_background);
             holder.chatitem_text.setTextColor(Color.WHITE);
             holder.chatitem_imageview.setBackgroundResource(R.drawable.message_text_background);
-            holder.chatitem_dispalyname.setText(displayname_chatuser);
-            if (!image_chatuser.equals("null")) {
+            holder.chatitem_dispalyname.setText(chat_name);
+            if (!chat_image.equals("null")) {
                 Glide.with(context)
-                        .load(image_chatuser)
+                        .load(chat_image)
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC))
                         .into(holder.chatitem_image);
             } else {
@@ -105,7 +102,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         Date date = new Date(currentTime);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final String formatedtime = formatter.format(date);
-        holder.chatitem_time.setText(formatedtime);
+
+        holder.chatitem_time.setText(c.getTime());
 
         if (messgae_type.equals("text")) {
             holder.chatitem_text.setText(c.getMessage());
