@@ -2,44 +2,40 @@ package com.huaihsuanhuang.chatterbox.Model;
 
 public class MessageListUsers {
 
-    private String mChatUid;
-    private String mChatUserName;
-    private String mChatUserThumb;
-    private String mChatUserOnline;
-    private String mLastMsg;
-    private String mTimestamp;
+    String chat_userName;
+    String chat_userThumb;
+    String chat_userOnline;
 
-    public MessageListUsers(String chatUid, String chatUserName, String chatUserThumb, String chatUserOnline, String lastMsg, String timestamp) {
-        mChatUid = chatUid;
-        mLastMsg = lastMsg;
-        mTimestamp = timestamp;
-        mChatUserName = chatUserName;
-        mChatUserThumb = chatUserThumb;
-        mChatUserOnline = chatUserOnline;
+    public MessageListUsers() {
     }
 
-    public String getChatUid() {
-        return mChatUid;
+    public MessageListUsers(String chat_userName, String chat_userThumb, String chat_userOnline) {
+        this.chat_userName = chat_userName;
+        this.chat_userThumb = chat_userThumb;
+        this.chat_userOnline = chat_userOnline;
     }
 
-    public String getLastMsg() {
-        return mLastMsg;
+    public String getChat_userName() {
+        return chat_userName;
     }
 
-    public String getTimestamp() {
-        return mTimestamp;
+    public void setChat_userName(String chat_userName) {
+        this.chat_userName = chat_userName;
     }
 
-    public String getChatUserName() {
-        return mChatUserName;
+    public String getChat_userThumb() {
+        return chat_userThumb;
     }
 
-    public String getChatUserThumb() {
-        return mChatUserThumb;
+    public void setChat_userThumb(String chat_userThumb) {
+        this.chat_userThumb = chat_userThumb;
     }
 
-    public String getChatUserOnline() {
-        return mChatUserOnline;
+    public String getChat_userOnline() {
+        return chat_userOnline;
     }
 
+    public void setChat_userOnline(String chat_userOnline) {
+        this.chat_userOnline = chat_userOnline;
+    }
 }
