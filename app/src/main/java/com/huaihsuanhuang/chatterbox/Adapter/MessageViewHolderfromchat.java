@@ -9,7 +9,7 @@ import com.huaihsuanhuang.chatterbox.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MessageViewHolder extends RecyclerView.ViewHolder{
+public class MessageViewHolderfromchat extends RecyclerView.ViewHolder{
 
 public TextView chatitem_text,chatitem_time,chatitem_dispalyname;
 public CircleImageView chatitem_image;
@@ -17,7 +17,7 @@ public ImageView chatitem_imageview;
 
 
 
-    public MessageViewHolder(View itemView) {
+    public MessageViewHolderfromchat(View itemView) {
         super(itemView);
 
         chatitem_text=itemView.findViewById(R.id.chatitem_text);

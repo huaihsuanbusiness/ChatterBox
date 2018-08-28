@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/chatitem_image_current"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@mipmap/empty_profile"
+        android:layout_alignParentRight="true"/>
+    <TextView
+        android:id="@+id/chatitem_dispalyname_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display Name"
+        android:textSize="16sp"
+        android:layout_toLeftOf="@+id/chatitem_image_current"
+        android:layout_marginRight="30dp"/>
+    <TextView
+        android:id="@+id/chatitem_time_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:textSize="16sp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/chatitem_dispalyname_current"
+
+        />
+
+    <TextView
+        android:id="@+id/chatitem_text_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/message_text_background_white"
+        android:padding="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="85dp"
+        android:layout_below="@id/chatitem_dispalyname_current"
+        android:text="text text"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"/>
+
+    <ImageView
+        android:id="@+id/chatitem_imageview_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chatitem_text_current"
+        android:padding="5dp"
+        android:src="@mipmap/logo_crop"
+        android:layout_marginRight="85dp"
+        android:layout_alignParentEnd="true"
+        android:scaleType="centerCrop" />
+
+</RelativeLayout>

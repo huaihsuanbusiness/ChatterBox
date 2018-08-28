@@ -4,10 +4,15 @@ public class Seen {
 
 
     public String seen;
-    public long timestamp;
+    public String timestamp;
 
     public Seen() {
 
+    }
+
+    public Seen(String seen, String timestamp) {
+        this.seen = seen;
+        this.timestamp = timestamp;
     }
 
     public String getSeen() {
@@ -18,16 +23,11 @@ public class Seen {
         this.seen = seen;
     }
 
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Seen(String seen, long timestamp) {
-        this.seen = seen;
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 }

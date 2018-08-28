@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolderfromchat> {
 
     private List<Messagemodel> mMessagelist;
 
@@ -40,17 +40,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
     @NonNull
     @Override
-    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MessageViewHolderfromchat onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         mAuth = FirebaseAuth.getInstance();
 
         view = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.message_item, parent, false);
-        return new MessageViewHolder(view);
+        return new MessageViewHolderfromchat(view);
     }
+//    @Override
+//    public int getItemViewType(int position) {
+//        // Just as an example, return 0 or 2 depending on position
+//        // Note that unlike in ListView adapters, types don't have to be contiguous
+//        return position % 2 * 2;
+//    }
 
     @Override
-    public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MessageViewHolderfromchat holder, int position) {
         String currentuid = mAuth.getCurrentUser().getUid();
 
         String from_user = "";
@@ -65,8 +71,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
 
         if (from_user.equals(currentuid)) {
-
+       //     MessageViewHolderfromcurrent viewHolder0 = (MessageViewHolderfromcurrent) holder;
             holder.chatitem_text.setBackgroundColor(Color.WHITE);
+            holder.chatitem_text.setBackgroundResource(R.drawable.message_text_background_white);
             holder.chatitem_text.setTextColor(Color.BLACK);
             holder.chatitem_imageview.setBackgroundColor(Color.WHITE);
             holder.chatitem_dispalyname.setText(currentuser_name);
@@ -83,6 +90,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 // remind bind 時間
 
         } else {
+
             holder.chatitem_text.setBackgroundResource(R.drawable.message_text_background);
             holder.chatitem_text.setTextColor(Color.WHITE);
             holder.chatitem_imageview.setBackgroundResource(R.drawable.message_text_background);
@@ -98,12 +106,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
         }
 
-        long currentTime = System.currentTimeMillis();
+        long currentTime = Long.valueOf(c.getTime());
         Date date = new Date(currentTime);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM.dd HH:mm");
         final String formatedtime = formatter.format(date);
 
-        holder.chatitem_time.setText(c.getTime());
+        holder.chatitem_time.setText(formatedtime);
 
         if (messgae_type.equals("text")) {
             holder.chatitem_text.setText(c.getMessage());

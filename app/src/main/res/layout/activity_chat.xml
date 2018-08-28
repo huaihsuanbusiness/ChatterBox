@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,7 @@
 
     >
 
+
     <include
         android:id="@+id/toolbar_chat"
         layout="@layout/app_bar_layout"
@@ -16,69 +17,80 @@
         >
 
     </include>
-
-
-<android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/chat_swipe"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_below="@id/toolbar_chat"
-    >
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/chat_swipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        app:layout_constraintBottom_toTopOf="@+id/chat_linear"
+        android:paddingTop="100dp">
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chat_messagelist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="#CCDDFF"
-        >
+        app:layout_constraintBottom_toTopOf="@+id/chat_linear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </android.support.v7.widget.RecyclerView>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-<LinearLayout
-    android:id="@+id/chat_linear"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:weightSum="10"
-    android:orientation="horizontal"
-
-    >
-
-    <ImageButton
-        android:id="@+id/chat_ib_plus"
-        android:layout_width="1dp"
+    <LinearLayout
+        android:id="@+id/chat_linear"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.5"
-        android:alpha="0.5"
-        android:background="@color/colorWhite"
-        android:elevation="7dp"
-        android:padding="10dp"
-        android:src="@drawable/ic_add_black_24dp" />
-    <EditText
-        android:id="@+id/chat_text"
-        android:layout_width="0dp"
-        android:layout_weight="7.0"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_gravity="bottom"
-        android:background="@color/colorWhite"
-        android:hint="Text here"
-        android:elevation="7dp"/>
-    <ImageButton
-        android:id="@+id/chat_ib_send"
-        android:layout_width="0dp"
-        android:layout_weight="1.7"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:elevation="7dp"
-        android:alpha="0.5"
-        android:background="@color/colorWhite"
-        android:src="@drawable/ic_send_black_24dp"/>
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+
+        android:orientation="horizontal"
+        android:weightSum="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/chat_ib_plus"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:alpha="0.5"
+            android:background="@color/colorWhite"
+            android:elevation="7dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_add_black_24dp" />
+
+        <EditText
+            android:id="@+id/chat_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="7.0"
+            android:background="@color/colorWhite"
+            android:elevation="7dp"
+            android:hint="Text here"
+            android:padding="10dp" />
+
+        <ImageButton
+            android:id="@+id/chat_ib_send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.7"
+            android:alpha="0.5"
+            android:background="@color/colorWhite"
+            android:elevation="7dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_send_black_24dp" />
+    </LinearLayout>
 
 
 
-</RelativeLayout>
+
+
+
+
+</android.support.constraint.ConstraintLayout>

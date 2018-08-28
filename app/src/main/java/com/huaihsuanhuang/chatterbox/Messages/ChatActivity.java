@@ -58,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     private String currentuser_name, currentuser_image;
     private ImageButton chat_ib_plus, chat_ib_send;
     private EditText chat_messageview;
-    private RecyclerView chat_meassagelist;
+    private RecyclerView chat_messagelist;
     private SwipeRefreshLayout refreshLayout;
     private List<Messagemodel> messagemodelList = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
@@ -94,10 +94,10 @@ public class ChatActivity extends AppCompatActivity {
         });
         chat_ib_send = findViewById(R.id.chat_ib_send);
         chat_messageview = findViewById(R.id.chat_text);
-        chat_meassagelist = findViewById(R.id.chat_messagelist);
+        chat_messagelist = findViewById(R.id.chat_messagelist);
         refreshLayout = findViewById(R.id.chat_swipe);
         linearLayoutManager = new LinearLayoutManager(this);
-        chat_meassagelist.setLayoutManager(linearLayoutManager);
+        chat_messagelist.setLayoutManager(linearLayoutManager);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
         ActionBar actionBar = getSupportActionBar();
@@ -114,6 +114,7 @@ public class ChatActivity extends AppCompatActivity {
         chatbar_lastseen = findViewById(R.id.chat_lastseen);
         chatbar_display.setText(mchatusername);
         mProfileImage = FirebaseStorage.getInstance().getReference();
+
         friend_selected_ref.child(mchatuserid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -130,6 +131,27 @@ public class ChatActivity extends AppCompatActivity {
                     chatbar_lastseen.setText("Online");
                     //remind: create a class for 多久前上線 28
                 }
+
+                friend_selected_ref.child(mcurrentuserid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        currentuser_name = dataSnapshot.child("name").getValue().toString();
+                        currentuser_image = dataSnapshot.child("thumb_image").getValue().toString();
+                        mMessageAdapter = new MessageAdapter(messagemodelList, currentuser_image,
+                                currentuser_name, chat_image, chat_name, getBaseContext());
+                        chat_messagelist.setAdapter(mMessageAdapter);
+                        loadmessage();
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
             }
 
             @Override
@@ -137,22 +159,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-        friend_selected_ref.child(mcurrentuserid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                currentuser_name = dataSnapshot.child("name").getValue().toString();
-                currentuser_image = dataSnapshot.child("thumb_image").getValue().toString();
 
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        mMessageAdapter = new MessageAdapter(messagemodelList, currentuser_image,
-                currentuser_name, chat_image, chat_name, getBaseContext());
-        chat_meassagelist.setAdapter(mMessageAdapter);
 
         rooffef.child("Chat").child(mcurrentuserid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -161,7 +169,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (!dataSnapshot.hasChild(mchatuserid)) {
                     Map chataddmap = new HashMap();
                     chataddmap.put("seen", "false");
-                    chataddmap.put("timestamp", System.currentTimeMillis());
+                    chataddmap.put("timestamp", String.valueOf(System.currentTimeMillis()));
 
                     Map chatusermap = new HashMap();
                     chatusermap.put("Chat/" + mcurrentuserid + "/" + mchatuserid, chataddmap);
@@ -196,14 +204,13 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 mcurrentpage++;
-                //            messagemodelList.clear();
-                //            loadmessage();
+
                 itemposition = 0;
                 loadmoremessage();
 
             }
         });
-        loadmessage();
+
     }
 
     private void loadmoremessage() {
@@ -264,28 +271,51 @@ public class ChatActivity extends AppCompatActivity {
         DatabaseReference loadmsgref = rooffef.child("Messages").child(mcurrentuserid).child(mchatuserid);
 
         Query messageQuery = loadmsgref.limitToLast(mcurrentpage * TOTAL_ITEMS_TO_LOAD);
-        messageQuery.addValueEventListener(new ValueEventListener() {
+        messageQuery.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    //    Log.d("snapmmmMap",snapshot.getKey()+" : "+snapshot.getValue());
-                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                        Log.d("snapmmmMap1", snapshot.getKey() + " : " + snapshot.getValue());
-                        mMap.put(snapshot1.getKey(), snapshot1.getValue());
-                        }
-                    Log.d("snapmMap1", mMap.toString());
-                    String message = mMap.get("message").toString();
-                    String seen = mMap.get("seen").toString();
-                    String time = mMap.get("time").toString();
-                    String type = mMap.get("type").toString();
-                    String from = mMap.get("from").toString();
-                    messagemodelList.add(new Messagemodel(message, seen, time, type, from));
-         Log.d("adapter", chat_image+"  "+currentuser_image+"  "+chat_name+"  "+currentuser_name);
-                    mMessageAdapter.notifyDataSetChanged();
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                    //TODO E/RecyclerView: No adapter attached; skipping layout
-                    mMap.clear();
+
+                    Messagemodel messagemodel = dataSnapshot.getValue(Messagemodel.class);
+
+
+                itemposition++;
+
+                if(itemposition == 1){
+
+                    String messageKey = dataSnapshot.getKey();
+
+                    mlastkey = messageKey;
+                    mprevkey = messageKey;
+
                 }
+                    String message = messagemodel.getMessage();
+                    String seen = messagemodel.getSeen();
+                    String time = messagemodel.getTime();
+                    String type = messagemodel.getType();
+                    String from = messagemodel.getFrom();
+                    messagemodelList.add(new Messagemodel(message, seen, time, type, from));
+
+                    mMessageAdapter.notifyDataSetChanged();
+                chat_messagelist.scrollToPosition(messagemodelList.size() - 1);
+
+                refreshLayout.setRefreshing(false);
+
+                }
+
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
 
@@ -313,7 +343,7 @@ public class ChatActivity extends AppCompatActivity {
             messagemap.put("message", message);
             messagemap.put("seen", "false");
             messagemap.put("type", "text");
-            messagemap.put("time", System.currentTimeMillis());
+            messagemap.put("time", String.valueOf(System.currentTimeMillis()));
             messagemap.put("from", mcurrentuserid);
 
             Map messageusermap = new HashMap();
@@ -371,11 +401,11 @@ public class ChatActivity extends AppCompatActivity {
                                 messageusermap.put(chat_user_fef + "/" + push_id, messagemap);
 
                                 chat_messageview.setText("");
-                                rooffef.child("Chat").child(mcurrentuserid).child(mchatuserid).child("seen").setValue(true);
-                                rooffef.child("Chat").child(mcurrentuserid).child(mchatuserid).child("timestamp").setValue(System.currentTimeMillis());
+                                rooffef.child("Chat").child(mcurrentuserid).child(mchatuserid).child("seen").setValue("true");
+                                rooffef.child("Chat").child(mcurrentuserid).child(mchatuserid).child("timestamp").setValue(String.valueOf(System.currentTimeMillis()));
 
-                                rooffef.child("Chat").child(mchatuserid).child(mcurrentuserid).child("seen").setValue(false);
-                                rooffef.child("Chat").child(mchatuserid).child(mcurrentuserid).child("timestamp").setValue(System.currentTimeMillis());
+                                rooffef.child("Chat").child(mchatuserid).child(mcurrentuserid).child("seen").setValue("false");
+                                rooffef.child("Chat").child(mchatuserid).child(mcurrentuserid).child("timestamp").setValue(String.valueOf(System.currentTimeMillis()));
                                 rooffef.updateChildren(messageusermap, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {

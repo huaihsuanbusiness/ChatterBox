@@ -40,7 +40,7 @@
         android:layout_below="@id/chatitem_dispalyname"
         android:text="text text"
         android:textColor="@color/colorWhite"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <ImageView
         android:id="@+id/chatitem_imageview"

@@ -62,22 +62,19 @@ public class FriendFragment extends Fragment {
         mfrienddatabase.keepSynced(true);
         muserreference.keepSynced(true);
         friendUsersList = new ArrayList<>();
-        mAdapter = new FriendlistAdapter(this.getContext(), friendUsersList);
+
         friend_list.setLayoutManager(new LinearLayoutManager(this.getContext()));
         friend_list.setDrawingCacheEnabled(true);
         friend_list.setItemViewCacheSize(20);
         friend_list.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+        mAdapter = new FriendlistAdapter(getContext(), friendUsersList);
         friend_list.setAdapter(mAdapter);
         loadinfriendlist();
 
         friend_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-         //      friend_list.setAdapter(null);
                 friendUsersList.clear();
-                mAdapter.notifyDataSetChanged();
-               friend_list.removeAllViewsInLayout();
-               friend_list.setAdapter(mAdapter);
                 loadinfriendlist();
                 friend_swipe.setRefreshing(false);
             }
@@ -107,13 +104,13 @@ public class FriendFragment extends Fragment {
                             String image = mMap.get("image").toString();
                             String chatuserid = snapshot.getKey();
 
-                            //      usersList.add(new Users(name, status, image, online, thumb_image));
+
                             friendUsersList.add(new FriendUsers(name, status, image, online, thumb_image, chatuserid));
 
                             Log.d("mmap", mMap.toString());
                             mAdapter.notifyDataSetChanged();
                             mMap.clear();
-                          //  friend_swipe.setRefreshing(false);
+
                         }
 
                         @Override

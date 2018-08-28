@@ -58,6 +58,7 @@ public class RequestFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         currentuid = mAuth.getCurrentUser().getUid();
         request_reference = FirebaseDatabase.getInstance().getReference().child("Request");
+
         muserreference = FirebaseDatabase.getInstance().getReference().child("Users");
         request_currentuserreceived = request_reference.child(currentuid);
         request_recyclerview = rootview.findViewById(R.id.request_recyclerview);

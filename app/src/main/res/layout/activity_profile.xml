@@ -6,19 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/profilebackground"
     tools:context=".Account.ProfileActivity">
-    <ProgressBar
-        android:id="@+id/progressbar_profile"
-        style="@android:style/Widget.ProgressBar.Large.Inverse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:elevation="7dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
+
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="match_parent"
@@ -56,7 +44,6 @@
         android:layout_below="@+id/profile_status"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
-        android:text="firend"
         android:textColor="@color/colorWhite"
         android:textSize="18sp" />
     <Button
