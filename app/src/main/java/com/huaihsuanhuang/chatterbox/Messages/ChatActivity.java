@@ -361,6 +361,22 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
 
+            // ===============================================================
+            // 此處將lastMsg、timestamp就直接放到Chat table, 就不用再Query message
+            Map<String, Object> chataddmap = new HashMap<>();
+            chataddmap.put("seen", "false");
+            chataddmap.put("timestamp", String.valueOf(System.currentTimeMillis()));
+            chataddmap.put("lastMessage", message);
+            FirebaseDatabase.getInstance().getReference().child("Chat").child(mcurrentuserid).child(mchatuserid).updateChildren(chataddmap, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                    if (databaseError != null) {
+                        Log.d("Chat error", databaseError.getMessage().toString());
+                    }
+                }
+            });
+            // ===============================================================
+
         }
     }
 
