@@ -276,7 +276,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
 
-                    Messagemodel messagemodel = dataSnapshot.getValue(Messagemodel.class);
+                Messagemodel messagemodel = dataSnapshot.getValue(Messagemodel.class);
 
 
                 itemposition++;
@@ -289,19 +289,19 @@ public class ChatActivity extends AppCompatActivity {
                     mprevkey = messageKey;
 
                 }
-                    String message = messagemodel.getMessage();
-                    String seen = messagemodel.getSeen();
-                    String time = messagemodel.getTime();
-                    String type = messagemodel.getType();
-                    String from = messagemodel.getFrom();
-                    messagemodelList.add(new Messagemodel(message, seen, time, type, from));
+                String message = messagemodel.getMessage();
+                String seen = messagemodel.getSeen();
+                String time = messagemodel.getTime();
+                String type = messagemodel.getType();
+                String from = messagemodel.getFrom();
+                messagemodelList.add(new Messagemodel(message, seen, time, type, from));
 
-                    mMessageAdapter.notifyDataSetChanged();
+                mMessageAdapter.notifyDataSetChanged();
                 chat_messagelist.scrollToPosition(messagemodelList.size() - 1);
 
                 refreshLayout.setRefreshing(false);
 
-                }
+            }
 
 
             @Override
@@ -326,7 +326,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
-//upload text
+    //upload text
     private void sendMessage() {
 
         String message = chat_messageview.getText().toString();
@@ -361,11 +361,27 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
 
+            // ===============================================================
+            // 此處將lastMsg、timestamp就直接放到Chat table, 就不用再Query message
+            Map<String, Object> chataddmap = new HashMap<>();
+            chataddmap.put("seen", "false");
+            chataddmap.put("timestamp", String.valueOf(System.currentTimeMillis()));
+            chataddmap.put("lastMessage", message);
+            FirebaseDatabase.getInstance().getReference().child("Chat").child(mcurrentuserid).child(mchatuserid).updateChildren(chataddmap, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                    if (databaseError != null) {
+                        Log.d("Chat error", databaseError.getMessage().toString());
+                    }
+                }
+            });
+            // ===============================================================
+
         }
     }
 
 
-//upload image
+    //upload image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
