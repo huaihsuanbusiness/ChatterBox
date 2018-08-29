@@ -1,11 +1,10 @@
 package com.huaihsuanhuang.chatterbox.Model;
 
 public class Messagemodel {
-private String message, seen,time,type,from;
+    private String message, seen, time, type, from;
 
 
-
-    public Messagemodel(){
+    public Messagemodel() {
 
     }
 

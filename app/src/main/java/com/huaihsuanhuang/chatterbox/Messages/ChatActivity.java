@@ -38,10 +38,9 @@ import com.huaihsuanhuang.chatterbox.Account.StartActivity;
 import com.huaihsuanhuang.chatterbox.Adapter.MessageAdapter;
 import com.huaihsuanhuang.chatterbox.Model.Messagemodel;
 import com.huaihsuanhuang.chatterbox.R;
+import com.huaihsuanhuang.chatterbox.Widget.LastLoginTime;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,13 +122,12 @@ public class ChatActivity extends AppCompatActivity {
                 String chat_onlinestatus = dataSnapshot.child("online").getValue().toString();
                 if (!chat_onlinestatus.equals("true")) {
                     long date_longtype = Long.parseLong(chat_onlinestatus);
-                    Date date = new Date(date_longtype);
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    final String formatedtime = formatter.format(date);
-                    chatbar_lastseen.setText(formatedtime);
+                    LastLoginTime lastLoginTime = new LastLoginTime();
+                    String fmtime = lastLoginTime.lastlogintime(date_longtype, getApplicationContext());
+                    chatbar_lastseen.setText(fmtime);
                 } else {
                     chatbar_lastseen.setText("Online");
-                    //remind: create a class for 多久前上線 28
+
                 }
 
                 friend_selected_ref.child(mcurrentuserid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -159,7 +157,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-
 
 
         rooffef.child("Chat").child(mcurrentuserid).addValueEventListener(new ValueEventListener() {
@@ -281,7 +278,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 itemposition++;
 
-                if(itemposition == 1){
+                if (itemposition == 1) {
 
                     String messageKey = dataSnapshot.getKey();
 
@@ -326,6 +323,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
+
     //upload text
     private void sendMessage() {
 
@@ -361,8 +359,6 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
 
-            // ===============================================================
-            // 此處將lastMsg、timestamp就直接放到Chat table, 就不用再Query message
             Map<String, Object> chataddmap = new HashMap<>();
             chataddmap.put("seen", "false");
             chataddmap.put("timestamp", String.valueOf(System.currentTimeMillis()));
@@ -375,7 +371,15 @@ public class ChatActivity extends AppCompatActivity {
                     }
                 }
             });
-            // ===============================================================
+            FirebaseDatabase.getInstance().getReference().child("Chat").child(mchatuserid).child(mcurrentuserid).updateChildren(chataddmap, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                    if (databaseError != null) {
+                        Log.d("Chat error", databaseError.getMessage().toString());
+                    }
+                }
+            });
+
 
         }
     }

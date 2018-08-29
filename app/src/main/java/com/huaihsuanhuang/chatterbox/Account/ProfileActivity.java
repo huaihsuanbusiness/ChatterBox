@@ -123,7 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         } else {
                             //沒請求時判斷ok
-                            //renew button or instant renew?
+                            //note: renew button or instant renew?
                             mfrienddatabase.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -169,13 +169,13 @@ public class ProfileActivity extends AppCompatActivity {
                     sendrequest();
                 }
                 if (current_state == 1) { //取消好友邀請ok
-              cancelrequest();
+                    cancelrequest();
                 }
                 if (current_state == 2) { //接受好友ok
                     acceptfriend();
                 }
                 if (current_state == 3) { //取消好友ok
-    deletefriend();
+                    deletefriend();
 
                 }
             }

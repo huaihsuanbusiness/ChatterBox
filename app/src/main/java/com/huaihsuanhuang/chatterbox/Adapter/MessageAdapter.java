@@ -48,12 +48,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolderfromch
                 inflate(R.layout.message_item, parent, false);
         return new MessageViewHolderfromchat(view);
     }
-//    @Override
-//    public int getItemViewType(int position) {
-//        // Just as an example, return 0 or 2 depending on position
-//        // Note that unlike in ListView adapters, types don't have to be contiguous
-//        return position % 2 * 2;
-//    }
+
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolderfromchat holder, int position) {
@@ -71,7 +66,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolderfromch
 
 
         if (from_user.equals(currentuid)) {
-       //     MessageViewHolderfromcurrent viewHolder0 = (MessageViewHolderfromcurrent) holder;
+
             holder.chatitem_text.setBackgroundColor(Color.WHITE);
             holder.chatitem_text.setBackgroundResource(R.drawable.message_text_background_white);
             holder.chatitem_text.setTextColor(Color.BLACK);
@@ -87,10 +82,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolderfromch
             }
 
 
-// remind bind 時間
-
         } else {
-
+            // remind bind 時間
             holder.chatitem_text.setBackgroundResource(R.drawable.message_text_background);
             holder.chatitem_text.setTextColor(Color.WHITE);
             holder.chatitem_imageview.setBackgroundResource(R.drawable.message_text_background);

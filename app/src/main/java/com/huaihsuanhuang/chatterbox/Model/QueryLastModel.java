@@ -7,7 +7,7 @@ public class QueryLastModel {
     String time;
     String type;
 
-    public QueryLastModel(){
+    public QueryLastModel() {
 
     }
 

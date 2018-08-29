@@ -43,7 +43,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
     public void onBindViewHolder(@NonNull RequestViewHolder holder, final int position) {
         holder.user_name.setText(requestlistmodelList.get(position).getName());
         holder.users_status.setText("Hi I sent a request to you!");
-        String thumb= requestlistmodelList.get(position).getThumb_image();
+        String thumb = requestlistmodelList.get(position).getThumb_image();
         if (!thumb.equals("null")) {
             Glide.with(context)
                     .load(thumb)
@@ -53,34 +53,35 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.RequestV
             holder.users_image.setImageResource(R.mipmap.empty_profile);
         }
 
-holder.users_carditem.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(context, ProfileActivity.class);
-        intent.putExtra("uid", requestlistmodelList.get(position).getUserid());
-        context.startActivity(intent);
+        holder.users_carditem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra("uid", requestlistmodelList.get(position).getUserid());
+                context.startActivity(intent);
 
-    }
-});
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-       return requestlistmodelList.size();
+        return requestlistmodelList.size();
 
     }
 
     class RequestViewHolder extends RecyclerView.ViewHolder {
-        TextView user_name ;
+        TextView user_name;
         ImageView users_image;
         TextView users_status;
         CardView users_carditem;
+
         RequestViewHolder(View itemView) {
             super(itemView);
             user_name = itemView.findViewById(R.id.users_name);
             users_image = itemView.findViewById(R.id.users_image);
-            users_status =itemView.findViewById(R.id.users_status);
-            users_carditem =itemView.findViewById(R.id.users_carditem);
+            users_status = itemView.findViewById(R.id.users_status);
+            users_carditem = itemView.findViewById(R.id.users_carditem);
 
 
         }

@@ -57,7 +57,7 @@
             android:id="@+id/chat_ib_plus"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="0"
             android:alpha="0.5"
             android:background="@color/colorWhite"
             android:elevation="7dp"
@@ -69,7 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="7.0"
+            android:layout_weight="8.3"
             android:background="@color/colorWhite"
             android:elevation="7dp"
             android:hint="Text here"
@@ -82,7 +82,7 @@
             android:layout_weight="1.7"
             android:alpha="0.5"
             android:background="@color/colorWhite"
-            android:elevation="7dp"
+            android:elevation="10dp"
             android:padding="10dp"
             android:src="@drawable/ic_send_black_24dp" />
     </LinearLayout>

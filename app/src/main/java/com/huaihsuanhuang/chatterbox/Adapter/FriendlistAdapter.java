@@ -19,7 +19,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.huaihsuanhuang.chatterbox.Account.ProfileActivity;
 import com.huaihsuanhuang.chatterbox.Messages.ChatActivity;
 import com.huaihsuanhuang.chatterbox.Model.FriendUsers;
-import com.huaihsuanhuang.chatterbox.Model.Users;
 import com.huaihsuanhuang.chatterbox.R;
 
 import java.util.List;
@@ -28,7 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendlistAdapter extends RecyclerView.Adapter<FriendlistAdapter.FriendlistViewHolder> {
     private Context context;
-   // private List<Users> usersList;
+
     private List<FriendUsers> friendUsersList;
     private View mView;
 
@@ -93,7 +92,7 @@ public class FriendlistAdapter extends RecyclerView.Adapter<FriendlistAdapter.Fr
         CardView users_carditem;
         CircleImageView users_image;
         TextView users_name, users_status;
-        //    ImageView users_online;
+
 
         FriendlistViewHolder(View itemView) {
             super(itemView);
@@ -103,7 +102,6 @@ public class FriendlistAdapter extends RecyclerView.Adapter<FriendlistAdapter.Fr
             users_image = itemView.findViewById(R.id.users_image);
             users_name = itemView.findViewById(R.id.users_name);
             users_status = itemView.findViewById(R.id.users_status);
-            //   users_online = itemView.findViewById(R.id.users_online);
 
 
         }

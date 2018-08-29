@@ -11,7 +11,8 @@ public class FriendUsers {
     private String key;
 
 
-    public FriendUsers(){}
+    public FriendUsers() {
+    }
 
     public FriendUsers(String name, String status, String image, String online, String thumb_image, String key) {
         this.name = name;

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,8 +66,8 @@ public class RequestFragment extends Fragment {
         request_recyclerview.setItemViewCacheSize(20);
         request_recyclerview.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
         request_recyclerview.setLayoutManager(layoutManager);
-        requestlistmodelList= new ArrayList<>();
-        mAdapter =new RequestAdapter(this.getContext(),requestlistmodelList);
+        requestlistmodelList = new ArrayList<>();
+        mAdapter = new RequestAdapter(this.getContext(), requestlistmodelList);
         request_recyclerview.setAdapter(mAdapter);
         requestlistmodelList.clear();
         mAdapter.notifyDataSetChanged();
@@ -90,15 +89,15 @@ public class RequestFragment extends Fragment {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                               for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                                   mMap.put(dataSnapshot1.getKey(), dataSnapshot1.getValue());
+                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                    mMap.put(dataSnapshot1.getKey(), dataSnapshot1.getValue());
 
-                               }
+                                }
                                 String name = mMap.get("name").toString();
                                 String thumb_image = mMap.get("thumb_image").toString();
 
-                             //   Log.d("dsp",dataSnapshot.getKey());
-                                requestlistmodelList.add(new Requestlistmodel(name,thumb_image,dataSnapshot.getKey()));
+
+                                requestlistmodelList.add(new Requestlistmodel(name, thumb_image, dataSnapshot.getKey()));
 
                                 mAdapter.notifyDataSetChanged();
                                 mMap.clear();

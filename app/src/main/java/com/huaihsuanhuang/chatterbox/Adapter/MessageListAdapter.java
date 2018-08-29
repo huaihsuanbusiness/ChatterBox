@@ -37,10 +37,12 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessagelistViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MessagelistViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MessagelistViewHolder holder, final int position) {
         holder.userStatusView.setText(messageListUsersList.get(position).getLastMsg());
+
+
         final String chatName = messageListUsersList.get(position).getChatUserName();
-        final String chatUid =  messageListUsersList.get(position).getChatUid();
+        final String chatUid = messageListUsersList.get(position).getChatUid();
         holder.userNameView.setText(chatName);
 
         if (!messageListUsersList.get(position).getChatUserThumb().equals("null")) {
@@ -61,6 +63,7 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessagelistViewHold
         holder.users_carditem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent_chat = new Intent(context, ChatActivity.class);
                 intent_chat.putExtra("uid", chatUid);
                 intent_chat.putExtra("name", chatName);

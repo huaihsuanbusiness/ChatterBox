@@ -63,17 +63,16 @@ public class MessagelistFragment extends Fragment {
         sortQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot chatSnapshot) {
-                // 取得所有聊天列表所有User
+                // obtain the chat lists
                 chatList.clear(); // 資料異動，清除Chat List
                 for (final DataSnapshot snapshot : chatSnapshot.getChildren()) {
                     final String chatUid = snapshot.getKey();
-                    final String lastMsg = TextUtils.isEmpty((String) snapshot.child("lastMessage").getValue()) ? "" : snapshot.child("lastMessage").getValue().toString();
-                    final String timestamp = TextUtils.isEmpty((String) snapshot.child("timestamp").getValue()) ? "" : snapshot.child("timestamp").getValue().toString();
-
+                    final String lastMsg = TextUtils.isEmpty((String) snapshot.child("lastMessage").getValue()) ? "" : String.valueOf(snapshot.child("lastMessage").getValue());
+                    final String timestamp = TextUtils.isEmpty((String) snapshot.child("timestamp").getValue()) ? "" : String.valueOf(snapshot.child("timestamp").getValue());
                     mUsersDatabase.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot userSnapshot) {
-                            // 取得到User資料
+                            // obtain User資料
                             String userName = userSnapshot.child("name").getValue().toString();
                             String userThumb = userSnapshot.child("thumb_image").getValue().toString();
                             String userOnline = userSnapshot.child("online").getValue().toString();

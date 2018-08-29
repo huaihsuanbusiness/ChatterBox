@@ -5,7 +5,8 @@ public class Requestlistmodel {
     private String name;
     private String thumb_image;
     private String userid;
-    public Requestlistmodel(){
+
+    public Requestlistmodel() {
 
 
     }

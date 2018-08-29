@@ -36,6 +36,7 @@ public class CreateAccount extends AppCompatActivity {
     private android.support.v7.widget.Toolbar mToolbar;
     private ProgressBar mCAprogressbar;
     private DatabaseReference firebaseDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +53,7 @@ public class CreateAccount extends AppCompatActivity {
                 createaccount();
             }
         });
-        mCAprogressbar =findViewById(R.id.progressbar_createaccounnt);
+        mCAprogressbar = findViewById(R.id.progressbar_createaccounnt);
         mCAprogressbar.setVisibility(View.GONE);
 
         mToolbar = findViewById(R.id.toolbar_creataccount);
@@ -89,8 +90,7 @@ public class CreateAccount extends AppCompatActivity {
         if (!(password.equals(confirm))) {
             Toast.makeText(this, "Confirm password", Toast.LENGTH_LONG).show();
             return;
-        }
-        else {
+        } else {
             mCAprogressbar.setVisibility(View.VISIBLE);
         }
 
@@ -101,20 +101,20 @@ public class CreateAccount extends AppCompatActivity {
                 if (task.isSuccessful()) {
 
                     FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-                    String uid =current_user.getUid();
+                    String uid = current_user.getUid();
                     firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
 
-                    HashMap<String,String> muserMap = new HashMap<>();
-                    muserMap.put("name",display);
+                    HashMap<String, String> muserMap = new HashMap<>();
+                    muserMap.put("name", display);
                     muserMap.put("status", "Hi I begin using the ChatterBox!");
-                    muserMap.put("image","null");
-                    muserMap.put("thumb_image","null");
+                    muserMap.put("image", "null");
+                    muserMap.put("thumb_image", "null");
                     firebaseDatabase.setValue(muserMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 mCAprogressbar.setVisibility(View.GONE);
-                                Toast.makeText(CreateAccount.this,"Account Created",Toast.LENGTH_LONG).show();
+                                Toast.makeText(CreateAccount.this, "Account Created", Toast.LENGTH_LONG).show();
                                 FirebaseUser user = myAuth.getCurrentUser();
                                 UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(display).build();
@@ -123,8 +123,8 @@ public class CreateAccount extends AppCompatActivity {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
 
-                              //  finish();
-        // TODO 有人輸入錯仍會上傳 導致資料會抓錯crash 待修
+
+                                // TODO 有人輸入錯仍會上傳 導致資料會抓錯crash 待修
                             }
                         }
                     });

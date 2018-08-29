@@ -116,8 +116,6 @@ public class UsersActivity extends AppCompatActivity {
 
         adapter_users.notifyDataSetChanged();
 
-     //   users_list.setNestedScrollingEnabled(false);
-
 
     }
 }

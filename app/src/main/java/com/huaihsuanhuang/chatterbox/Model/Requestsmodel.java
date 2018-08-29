@@ -3,9 +3,10 @@ package com.huaihsuanhuang.chatterbox.Model;
 public class Requestsmodel {
     public String request_type;
 
-    public Requestsmodel(){
+    public Requestsmodel() {
 
     }
+
     public Requestsmodel(String request_type) {
         this.request_type = request_type;
     }

@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.huaihsuanhuang.chatterbox.Mainpage.MessagelistFragment;
 import com.huaihsuanhuang.chatterbox.Mainpage.FriendFragment;
+import com.huaihsuanhuang.chatterbox.Mainpage.MessagelistFragment;
 import com.huaihsuanhuang.chatterbox.Mainpage.RequestFragment;
 
 public class SectionPagerAdapter extends FragmentPagerAdapter {
@@ -36,7 +36,7 @@ public class SectionPagerAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
-    public CharSequence getPageTitle(int position){
+    public CharSequence getPageTitle(int position) {
         switch (position) {
 
             case 0:

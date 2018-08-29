@@ -32,7 +32,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp).setContentTitle("Title").setContentText("Context");
         int mNotification_id = (int) System.currentTimeMillis();
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        manager.notify(mNotification_id,builder.build());
+        manager.notify(mNotification_id, builder.build());
 
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
