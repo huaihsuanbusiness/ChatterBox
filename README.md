@@ -1,1 +1,2 @@
-This is my second app ChatterBox, it's an integrated instant message application, please watch the demo video (2m28s) : https://youtu.be/bGQ-4yoR7hA 
+This is my second app ChatterBox, it's an integrated instant message application, 
+Please watch the demo video (with backgroud music, 2m28s) : https://youtu.be/bGQ-4yoR7hA 
